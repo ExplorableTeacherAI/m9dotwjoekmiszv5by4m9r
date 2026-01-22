@@ -63,8 +63,14 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 189 100% 50%;
+    --primary: 220 90% 56%;
     --primary-foreground: 210 40% 98%;
+
+    /* Circle lesson colors */
+    --circle-center: 45 100% 51%;
+    --circle-radius: 142 76% 36%;
+    --circle-diameter: 262 83% 58%;
+    --circle-fill: 220 90% 56%;
 
     --secondary: 210 40% 96%;
     --secondary-foreground: 222.2 84% 4.9%;
