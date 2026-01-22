@@ -4,6 +4,7 @@ import { CircleIntroSection } from "./sections/CircleIntroSection";
 import { RadiusDiameterSection } from "./sections/RadiusDiameterSection";
 import { DiscoveringPiSection } from "./sections/DiscoveringPiSection";
 import { AreaOfCircleSection } from "./sections/AreaOfCircleSection";
+import { RealWorldExamplesSection } from "./sections/RealWorldExamplesSection";
 
 /**
  * Understanding the Circle and Its Area
@@ -29,5 +30,10 @@ export const sections: ReactElement[] = [
   // Section 4: Area of a Circle
   <FullWidthLayout key="area-of-circle" maxWidth="xl">
     <AreaOfCircleSection />
+  </FullWidthLayout>,
+
+  // Section 5: Real-World Examples
+  <FullWidthLayout key="real-world-examples" maxWidth="xl">
+    <RealWorldExamplesSection />
   </FullWidthLayout>,
 ];
