@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Section } from "@/components/templates";
 import { Mafs, Circle, Text } from "mafs";
-import { Slider } from "@/components/atoms/ui/slider";
+import { InlineStepper } from "@/components/atoms/InlineStepper";
 
 /**
  * Section 5: Real-World Examples
@@ -144,29 +144,25 @@ export const RealWorldExamplesSection = () => {
           </div>
         </div>
 
-        {/* Area Calculator */}
+        {/* Area Calculator - Inline */}
         <div className="bg-card rounded-2xl p-6 shadow-lg border border-border">
           <h3 className="text-xl font-semibold text-foreground mb-4">
             Try It Yourself!
           </h3>
-          <p className="text-muted-foreground mb-6">
-            Use the slider to set a radius and calculate the area of any circle.
-          </p>
-
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-sm font-medium text-muted-foreground w-20">Radius:</span>
-            <Slider
-              value={[customRadius]}
-              onValueChange={(value) => setCustomRadius(value[0])}
+          <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+            If a circle has a radius of{" "}
+            <InlineStepper
+              value={customRadius}
+              onChange={setCustomRadius}
               min={1}
               max={15}
               step={0.5}
-              className="flex-1"
-            />
-            <span className="text-lg font-bold text-primary w-20 text-right">
-              {customRadius} cm
-            </span>
-          </div>
+              color="hsl(142, 76%, 36%)"
+              bgColor="hsla(142, 76%, 36%, 0.9)"
+              formatValue={(v) => v.toFixed(1)}
+            />{" "}
+            cm, what is its area?
+          </p>
 
           <div className="bg-muted/30 rounded-xl p-6">
             <div className="flex justify-center items-center gap-3 flex-wrap text-lg mb-4">

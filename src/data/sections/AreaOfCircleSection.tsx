@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Section } from "@/components/templates";
-import { Mafs, Circle, Polygon, Text, vec, useMovablePoint } from "mafs";
-import { Slider } from "@/components/atoms/ui/slider";
+import { Mafs, Polygon, Text, vec, useMovablePoint } from "mafs";
 import { Glossary } from "@/components/annotations";
+import { InlineStepper } from "@/components/atoms/InlineStepper";
 
 /**
  * Section 4: Area of a Circle
@@ -73,7 +73,17 @@ export const AreaOfCircleSection = () => {
           />{" "}
           of a circle tells us how much space is inside it. The formula is{" "}
           <strong>A = π × r²</strong>. But why does this formula work?
-          Drag the blue point to change the radius, and use the slider to add more slices!
+          Try cutting the circle into{" "}
+          <InlineStepper
+            value={numWedges}
+            onChange={setNumWedges}
+            min={4}
+            max={24}
+            step={2}
+            color="hsl(220, 90%, 56%)"
+            bgColor="hsla(220, 90%, 56%, 0.9)"
+          />{" "}
+          slices and see what happens!
         </p>
 
         {/* Circle Visualization */}
@@ -107,24 +117,6 @@ export const AreaOfCircleSection = () => {
           <p className="text-center text-sm text-muted-foreground mt-3">
             Drag the blue point to change the radius
           </p>
-        </div>
-
-        {/* Slices Control - keeping slider only for number of slices */}
-        <div className="bg-muted/30 rounded-xl p-6 border border-border mb-6">
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-muted-foreground w-24">Slices:</span>
-            <Slider
-              value={[numWedges]}
-              onValueChange={(value) => setNumWedges(value[0])}
-              min={4}
-              max={24}
-              step={2}
-              className="flex-1"
-            />
-            <span className="text-lg font-bold text-primary w-16 text-right">
-              {numWedges}
-            </span>
-          </div>
         </div>
 
         {/* Area Calculation Display */}
@@ -174,7 +166,7 @@ export const AreaOfCircleSection = () => {
             </li>
           </ul>
           <p className="text-muted-foreground mt-4 text-sm italic">
-            Try increasing the number of slices above to 24 — the more slices, the more
+            Try increasing the number of slices to 24 in the paragraph above — the more slices, the more
             it looks like a perfect rectangle!
           </p>
         </div>
