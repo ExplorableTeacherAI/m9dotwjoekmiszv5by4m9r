@@ -68,7 +68,6 @@ export const CircleIntroSection = () => {
           <Mafs
             height={350}
             viewBox={{ x: [-4, 4], y: [-3.5, 3.5] }}
-            preserveAspectRatio={false}
           >
             {/* The circle */}
             <Circle
