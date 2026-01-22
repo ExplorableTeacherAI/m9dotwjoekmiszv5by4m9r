@@ -49,7 +49,6 @@ export const DiscoveringPiSection = () => {
           <Mafs
             height={320}
             viewBox={{ x: [-4.5, 4.5], y: [-3.5, 3.5] }}
-            preserveAspectRatio={false}
           >
             {/* The circle with highlighted circumference */}
             <Circle

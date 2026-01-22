@@ -107,7 +107,6 @@ export const AreaOfCircleSection = () => {
           <Mafs
             height={300}
             viewBox={{ x: [-4, 4], y: [-3, 3] }}
-            preserveAspectRatio={false}
           >
             {/* Draw wedges */}
             {wedges.map((wedge, i) => (

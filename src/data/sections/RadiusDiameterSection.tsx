@@ -43,7 +43,6 @@ export const RadiusDiameterSection = () => {
           <Mafs
             height={350}
             viewBox={{ x: [-5, 5], y: [-4, 4] }}
-            preserveAspectRatio={false}
           >
             {/* The circle */}
             <Circle

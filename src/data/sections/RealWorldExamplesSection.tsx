@@ -49,7 +49,6 @@ export const RealWorldExamplesSection = () => {
             <Mafs
               height={200}
               viewBox={{ x: [-10, 10], y: [-4, 4] }}
-              preserveAspectRatio={false}
             >
               {pizzas.map((pizza, index) => {
                 const xPos = -6 + index * 6;
