@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Section } from "@/components/templates";
-import { Mafs, Circle, Point, Line, Text, vec } from "mafs";
+import { Mafs, Circle, Point, Line, Text, vec, useMovablePoint } from "mafs";
 import { Glossary } from "@/components/annotations";
 
 /**
@@ -10,10 +10,17 @@ import { Glossary } from "@/components/annotations";
 export const CircleIntroSection = () => {
   const [angle, setAngle] = useState(0);
   const [isAnimating, setIsAnimating] = useState(true);
-  const radius = 2;
   const center: vec.Vector2 = [0, 0];
 
-  // Calculate point position on circle
+  // Draggable point to control radius
+  const radiusPoint = useMovablePoint([2, 0], {
+    color: "hsl(142, 76%, 36%)",
+  });
+
+  // Calculate radius from draggable point
+  const radius = Math.max(0.5, Math.sqrt(radiusPoint.point[0] ** 2 + radiusPoint.point[1] ** 2));
+
+  // Calculate animated point position on circle
   const pointOnCircle: vec.Vector2 = [
     Math.cos(angle) * radius,
     Math.sin(angle) * radius
@@ -29,6 +36,15 @@ export const CircleIntroSection = () => {
 
     return () => clearInterval(interval);
   }, [isAnimating]);
+
+  // Keep the draggable point on the circle edge
+  useEffect(() => {
+    const currentRadius = Math.sqrt(radiusPoint.point[0] ** 2 + radiusPoint.point[1] ** 2);
+    if (Math.abs(currentRadius - radius) > 0.01) {
+      const angle = Math.atan2(radiusPoint.point[1], radiusPoint.point[0]);
+      radiusPoint.setPoint([Math.cos(angle) * radius, Math.sin(angle) * radius]);
+    }
+  }, [radiusPoint.point]);
 
   return (
     <Section id="circle-intro">
@@ -94,7 +110,7 @@ export const CircleIntroSection = () => {
               Center
             </Text>
 
-            {/* Radius line */}
+            {/* Radius line to animated point */}
             <Line.Segment
               point1={center}
               point2={pointOnCircle}
@@ -102,7 +118,7 @@ export const CircleIntroSection = () => {
               weight={3}
             />
 
-            {/* Moving point on circle */}
+            {/* Animated point on circle */}
             <Point
               x={pointOnCircle[0]}
               y={pointOnCircle[1]}
@@ -117,9 +133,17 @@ export const CircleIntroSection = () => {
               size={14}
               color="hsl(142, 76%, 36%)"
             >
-              radius = {radius}
+              radius = {radius.toFixed(1)}
             </Text>
+
+            {/* Draggable point to resize circle */}
+            {radiusPoint.element}
           </Mafs>
+
+          {/* Instruction hint */}
+          <p className="text-center text-sm text-muted-foreground mt-3">
+            Drag the green point to change the circle size
+          </p>
         </div>
 
         {/* Controls */}

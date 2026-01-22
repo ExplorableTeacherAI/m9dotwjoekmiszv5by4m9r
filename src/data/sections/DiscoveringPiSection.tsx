@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Section } from "@/components/templates";
-import { Mafs, Circle, Point, Line, Text, vec } from "mafs";
-import { Slider } from "@/components/atoms/ui/slider";
+import { Mafs, Circle, Point, Line, Text, vec, useMovablePoint } from "mafs";
 import { Glossary } from "@/components/annotations";
 
 /**
@@ -9,9 +7,16 @@ import { Glossary } from "@/components/annotations";
  * Interactive visualization showing circumference ÷ diameter = π
  */
 export const DiscoveringPiSection = () => {
-  const [radius, setRadius] = useState(2);
   const center: vec.Vector2 = [0, 0];
 
+  // Draggable point to control circle size
+  const sizePoint = useMovablePoint([2, 0], {
+    constrain: "horizontal",
+    color: "hsl(340, 82%, 52%)",
+  });
+
+  // Calculate radius from draggable point
+  const radius = Math.max(0.5, Math.abs(sizePoint.point[0]));
   const diameter = radius * 2;
   const circumference = 2 * Math.PI * radius;
   const ratio = circumference / diameter;
@@ -71,9 +76,11 @@ export const DiscoveringPiSection = () => {
             {/* Center point */}
             <Point x={center[0]} y={center[1]} color="hsl(45, 100%, 51%)" />
 
-            {/* Diameter endpoints */}
+            {/* Left diameter endpoint */}
             <Point x={-radius} y={0} color="hsl(262, 83%, 58%)" />
-            <Point x={radius} y={0} color="hsl(262, 83%, 58%)" />
+
+            {/* Draggable right endpoint */}
+            {sizePoint.element}
 
             {/* Labels */}
             <Text x={0} y={-0.6} size={12}>
@@ -98,26 +105,15 @@ export const DiscoveringPiSection = () => {
               diameter = {diameter.toFixed(1)}
             </Text>
           </Mafs>
+
+          {/* Instruction hint */}
+          <p className="text-center text-sm text-muted-foreground mt-3">
+            Drag the pink point to change the circle size — watch the ratio stay the same!
+          </p>
         </div>
 
-        {/* Slider Control */}
+        {/* The magic ratio calculation */}
         <div className="bg-muted/30 rounded-xl p-6 border border-border mb-6">
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-sm font-medium text-muted-foreground w-20">Size:</span>
-            <Slider
-              value={[radius]}
-              onValueChange={(value) => setRadius(value[0])}
-              min={0.8}
-              max={3}
-              step={0.1}
-              className="flex-1"
-            />
-            <span className="text-lg font-bold text-primary w-20 text-right">
-              r = {radius.toFixed(1)}
-            </span>
-          </div>
-
-          {/* The magic ratio calculation */}
           <div className="bg-background rounded-xl p-6 border border-border">
             <div className="text-center mb-4">
               <span className="text-sm text-muted-foreground">The Magic Ratio</span>

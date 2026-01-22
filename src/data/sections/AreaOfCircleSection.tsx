@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Section } from "@/components/templates";
-import { Mafs, Circle, Polygon, Text, vec } from "mafs";
+import { Mafs, Circle, Polygon, Text, vec, useMovablePoint } from "mafs";
 import { Slider } from "@/components/atoms/ui/slider";
 import { Glossary } from "@/components/annotations";
 
@@ -10,13 +10,19 @@ import { Glossary } from "@/components/annotations";
  * Includes a visual proof by rearranging wedges
  */
 export const AreaOfCircleSection = () => {
-  const [radius, setRadius] = useState(2);
   const [numWedges, setNumWedges] = useState(8);
-  const [showRearranged, setShowRearranged] = useState(false);
 
   const center: vec.Vector2 = [0, 0];
+
+  // Draggable point to control radius
+  const radiusPoint = useMovablePoint([2, 0], {
+    constrain: "horizontal",
+    color: "hsl(220, 90%, 56%)",
+  });
+
+  // Calculate radius from draggable point
+  const radius = Math.max(0.5, Math.min(2.5, Math.abs(radiusPoint.point[0])));
   const area = Math.PI * radius * radius;
-  const circumference = 2 * Math.PI * radius;
 
   // Generate wedge polygons for the circle
   const generateWedges = () => {
@@ -33,37 +39,6 @@ export const AreaOfCircleSection = () => {
         [Math.cos(endAngle) * radius, Math.sin(endAngle) * radius],
       ];
       wedges.push(wedge);
-    }
-    return wedges;
-  };
-
-  // Generate rearranged wedges (parallelogram-like shape)
-  const generateRearrangedWedges = () => {
-    const wedges: vec.Vector2[][] = [];
-    const angleStep = (2 * Math.PI) / numWedges;
-    const wedgeWidth = (circumference / 2) / (numWedges / 2);
-
-    for (let i = 0; i < numWedges; i++) {
-      const isPointingUp = i % 2 === 0;
-      const xOffset = Math.floor(i / 2) * wedgeWidth - (circumference / 4) + wedgeWidth / 2;
-
-      if (isPointingUp) {
-        // Wedge pointing up
-        const wedge: vec.Vector2[] = [
-          [xOffset, 0],
-          [xOffset - wedgeWidth / 2, 0],
-          [xOffset, radius],
-        ];
-        wedges.push(wedge);
-      } else {
-        // Wedge pointing down (inverted)
-        const wedge: vec.Vector2[] = [
-          [xOffset, 0],
-          [xOffset + wedgeWidth / 2, 0],
-          [xOffset, radius],
-        ];
-        wedges.push(wedge);
-      }
     }
     return wedges;
   };
@@ -98,8 +73,7 @@ export const AreaOfCircleSection = () => {
           />{" "}
           of a circle tells us how much space is inside it. The formula is{" "}
           <strong>A = π × r²</strong>. But why does this formula work?
-          Try increasing the number of slices below to see how a circle can be
-          rearranged into a rectangle!
+          Drag the blue point to change the radius, and use the slider to add more slices!
         </p>
 
         {/* Circle Visualization */}
@@ -120,30 +94,23 @@ export const AreaOfCircleSection = () => {
               />
             ))}
 
-            {/* Center label */}
-            <Text x={0} y={-radius - 0.5} size={14}>
+            {/* Draggable point to control radius */}
+            {radiusPoint.element}
+
+            {/* Radius label */}
+            <Text x={radius / 2} y={-0.4} size={14}>
               r = {radius.toFixed(1)}
             </Text>
           </Mafs>
+
+          {/* Instruction hint */}
+          <p className="text-center text-sm text-muted-foreground mt-3">
+            Drag the blue point to change the radius
+          </p>
         </div>
 
-        {/* Controls */}
+        {/* Slices Control - keeping slider only for number of slices */}
         <div className="bg-muted/30 rounded-xl p-6 border border-border mb-6">
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-sm font-medium text-muted-foreground w-24">Radius:</span>
-            <Slider
-              value={[radius]}
-              onValueChange={(value) => setRadius(value[0])}
-              min={1}
-              max={2.5}
-              step={0.1}
-              className="flex-1"
-            />
-            <span className="text-lg font-bold text-primary w-16 text-right">
-              {radius.toFixed(1)}
-            </span>
-          </div>
-
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium text-muted-foreground w-24">Slices:</span>
             <Slider

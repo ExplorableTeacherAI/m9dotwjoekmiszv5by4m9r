@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Section } from "@/components/templates";
-import { Mafs, Circle, Point, Line, Text, vec } from "mafs";
-import { Slider } from "@/components/atoms/ui/slider";
+import { Mafs, Circle, Point, Line, Text, vec, useMovablePoint } from "mafs";
 import { Glossary } from "@/components/annotations";
 
 /**
@@ -9,8 +7,16 @@ import { Glossary } from "@/components/annotations";
  * Interactive visualization showing the relationship between radius and diameter
  */
 export const RadiusDiameterSection = () => {
-  const [radius, setRadius] = useState(2);
   const center: vec.Vector2 = [0, 0];
+
+  // Draggable point on the right side of diameter
+  const diameterPoint = useMovablePoint([2, 0], {
+    constrain: "horizontal",
+    color: "hsl(262, 83%, 58%)",
+  });
+
+  // Calculate radius from draggable point (ensure minimum)
+  const radius = Math.max(0.5, Math.abs(diameterPoint.point[0]));
   const diameter = radius * 2;
 
   // Points for the diameter line
@@ -34,7 +40,7 @@ export const RadiusDiameterSection = () => {
             bgColor="hsl(262, 83%, 95%)"
           />{" "}
           is a line that goes all the way across the circle, passing through the center.
-          It's always <strong>twice as long</strong> as the radius. Try moving the slider below
+          It's always <strong>twice as long</strong> as the radius. Drag the purple point
           to see how the radius and diameter change together!
         </p>
 
@@ -62,7 +68,7 @@ export const RadiusDiameterSection = () => {
               weight={4}
             />
 
-            {/* Radius line (green) - from center to right edge */}
+            {/* Radius line (green) - from center to top */}
             <Line.Segment
               point1={center}
               point2={[0, radius]}
@@ -77,9 +83,11 @@ export const RadiusDiameterSection = () => {
               color="hsl(45, 100%, 51%)"
             />
 
-            {/* Diameter endpoints */}
+            {/* Left diameter endpoint */}
             <Point x={leftPoint[0]} y={leftPoint[1]} color="hsl(262, 83%, 58%)" />
-            <Point x={rightPoint[0]} y={rightPoint[1]} color="hsl(262, 83%, 58%)" />
+
+            {/* Draggable right diameter endpoint */}
+            {diameterPoint.element}
 
             {/* Radius endpoint */}
             <Point x={0} y={radius} color="hsl(142, 76%, 36%)" />
@@ -107,27 +115,16 @@ export const RadiusDiameterSection = () => {
               r = {radius.toFixed(1)}
             </Text>
           </Mafs>
+
+          {/* Instruction hint */}
+          <p className="text-center text-sm text-muted-foreground mt-3">
+            Drag the purple point left or right to resize the circle
+          </p>
         </div>
 
-        {/* Slider Control */}
+        {/* Display the relationship */}
         <div className="bg-muted/30 rounded-xl p-6 border border-border mb-6">
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-sm font-medium text-muted-foreground w-20">Radius:</span>
-            <Slider
-              value={[radius]}
-              onValueChange={(value) => setRadius(value[0])}
-              min={0.5}
-              max={3.5}
-              step={0.1}
-              className="flex-1"
-            />
-            <span className="text-lg font-bold text-primary w-16 text-right">
-              {radius.toFixed(1)}
-            </span>
-          </div>
-
-          {/* Display the relationship */}
-          <div className="flex justify-center gap-8 mt-6 p-4 bg-background rounded-lg">
+          <div className="flex justify-center gap-8 p-4 bg-background rounded-lg">
             <div className="text-center">
               <div className="text-3xl font-bold" style={{ color: "hsl(142, 76%, 36%)" }}>
                 {radius.toFixed(1)}
