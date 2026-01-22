@@ -2,6 +2,7 @@ import { type ReactElement } from "react";
 import { FullWidthLayout } from "@/components/layouts";
 import { CircleIntroSection } from "./sections/CircleIntroSection";
 import { RadiusDiameterSection } from "./sections/RadiusDiameterSection";
+import { DiscoveringPiSection } from "./sections/DiscoveringPiSection";
 
 /**
  * Understanding the Circle and Its Area
@@ -17,5 +18,10 @@ export const sections: ReactElement[] = [
   // Section 2: Radius and Diameter
   <FullWidthLayout key="radius-diameter" maxWidth="xl">
     <RadiusDiameterSection />
+  </FullWidthLayout>,
+
+  // Section 3: Discovering Pi
+  <FullWidthLayout key="discovering-pi" maxWidth="xl">
+    <DiscoveringPiSection />
   </FullWidthLayout>,
 ];
